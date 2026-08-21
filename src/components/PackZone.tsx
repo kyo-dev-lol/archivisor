@@ -140,7 +140,7 @@ export default function PackZone({ onBack }: PackZoneProps) {
           <p className="font-display text-base font-semibold text-[var(--vault-ink)]">
             Drop files here
           </p>
-          <p className="mt-1 text-xs text-[var(--vault-ink-faint)]">or click to choose â multiple allowed</p>
+          <p className="mt-1 text-xs text-[var(--vault-ink-faint)]">or click to choose - multiple allowed</p>
           <input
             ref={inputRef}
             type="file"
