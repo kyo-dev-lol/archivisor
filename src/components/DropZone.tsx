@@ -37,7 +37,7 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
             Archivisor
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[var(--vault-ink-dim)] sm:text-base">
-            Open archives in the browser, extract only what you need â or pack files into ZIP, TAR, 7Z.
+                        Open archives in the browser, extract only what you need - or pack files into ZIP, TAR, 7Z.
           </p>
         </div>
 
