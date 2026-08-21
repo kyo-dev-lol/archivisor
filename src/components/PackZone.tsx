@@ -71,7 +71,7 @@ export default function PackZone({ onBack }: PackZoneProps) {
     }
     setBusy(true);
     setError(null);
-    setProgressMsg('Reading filesâ¦');
+    setProgressMsg('Reading files¦');
     try {
       const packed: PackFile[] = [];
       for (const item of items) {
