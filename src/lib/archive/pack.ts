@@ -212,7 +212,9 @@ export function extensionForFormat(format: PackFormat): string {
 }
 
 export function downloadBytes(data: Uint8Array, filename: string) {
-  const blob = new Blob([data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength)], { type: 'application/octet-stream' });
+  const copy = new Uint8Array(data.byteLength);
+  copy.set(data);
+  const blob = new Blob([copy], { type: 'application/octet-stream' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
