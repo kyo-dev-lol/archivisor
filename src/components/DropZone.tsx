@@ -4,11 +4,12 @@ import type { DragEvent } from 'react';
 interface DropZoneProps {
   onFileSelected: (file: File) => void;
   errorMessage?: string | null;
+  onCreateArchive?: () => void;
 }
 
 const FORMAT_BADGES = ['ZIP', '7Z', 'TAR', 'TAR.GZ', 'GZ', 'BZ2', 'XZ'];
 
-export default function DropZone({ onFileSelected, errorMessage }: DropZoneProps) {
+export default function DropZone({ onFileSelected, errorMessage, onCreateArchive }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,10 +34,10 @@ export default function DropZone({ onFileSelected, errorMessage }: DropZoneProps
             <VaultIcon />
           </div>
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-[var(--vault-ink)] sm:text-4xl">
-            Vaultkeep
+            Archivisor
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[var(--vault-ink-dim)] sm:text-base">
-            View and download individual files without downloading the whole archive.
+            Open archives in the browser, extract only what you need â or pack files into ZIP, TAR, 7Z.
           </p>
         </div>
 
@@ -98,6 +99,21 @@ export default function DropZone({ onFileSelected, errorMessage }: DropZoneProps
           <p className="mt-4 rounded-lg border border-[var(--vault-danger)]/40 bg-[var(--vault-danger)]/10 px-4 py-3 text-center text-sm text-[var(--vault-danger)]">
             {errorMessage}
           </p>
+        )}
+
+        {onCreateArchive && (
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCreateArchive();
+              }}
+              className="rounded-full border border-[var(--vault-copper-dim)] px-6 py-2.5 text-sm font-medium text-[var(--vault-copper-bright)] transition-colors hover:bg-[var(--vault-copper-dim)] hover:text-[var(--vault-void)]"
+            >
+              Create archive from files
+            </button>
+          </div>
         )}
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
