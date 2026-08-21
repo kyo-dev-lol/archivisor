@@ -245,7 +245,7 @@ export default function PackZone({ onBack }: PackZoneProps) {
           disabled={busy || items.length === 0}
           className="w-full rounded-full border border-[var(--vault-copper-dim)] bg-[var(--vault-void)] py-3.5 text-sm font-semibold tracking-wide text-[var(--vault-copper-bright)] transition-colors hover:bg-[var(--vault-copper-dim)] hover:text-[var(--vault-void)] disabled:opacity-50"
         >
-          {busy ? 'Creatingâ¦' : `Create .${extensionForFormat(format)}`}
+          {busy ? 'Creating¦' : `Create .${extensionForFormat(format)}`}
         </button>
       </div>
     </div>
