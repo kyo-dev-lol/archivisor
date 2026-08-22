@@ -1,14 +1,11 @@
 import * as pdfjs from 'pdfjs-dist';
+import workerSrc from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import type { ArchiveEntry, ArchiveHandler, ArchiveReader, ProgressCallback } from './types';
 
-// PDF.js worker (Vite resolves the URL at build time).
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
+// Keep worker in sync with the same pdfjs-dist build (fixes getOrInsertComputed / worker mismatch).
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 function isPdfHeader(bytes: Uint8Array): boolean {
-  // %PDF
   return (
     bytes.length >= 4 &&
     bytes[0] === 0x25 &&
@@ -53,24 +50,34 @@ class PdfReader implements ArchiveReader {
     const cached = this.pageCache.get(pageNumber);
     if (cached) return cached;
 
-    onProgress?.({ phase: 'extracting', fraction: 0.1, message: `Rendering page ${pageNumber}...` });
+    onProgress?.({ phase: 'extracting', fraction: 0.15, message: `Rendering page ${pageNumber}...` });
     const page = await this.pdf.getPage(pageNumber);
-    // Scale for readable preview / download ( ~150 DPI-ish )
     const viewport = page.getViewport({ scale: 2 });
     const canvas = document.createElement('canvas');
     canvas.width = Math.floor(viewport.width);
     canvas.height = Math.floor(viewport.height);
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) throw new Error('Canvas not available');
 
-    await page.render({ canvasContext: ctx, viewport, canvas }).promise;
-    onProgress?.({ phase: 'extracting', fraction: 0.8, message: 'Encoding PNG...' });
+    const task = page.render({
+      canvasContext: ctx,
+      viewport,
+      // pdfjs 4.x types
+      canvas,
+    } as Parameters<typeof page.render>[0]);
+    await task.promise;
 
+    onProgress?.({ phase: 'extracting', fraction: 0.85, message: 'Encoding PNG...' });
     const blob: Blob = await new Promise((resolve, reject) => {
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('PNG encode failed'))), 'image/png');
     });
     const buf = new Uint8Array(await blob.arrayBuffer());
     this.pageCache.set(pageNumber, buf);
+
+    // Update listed size for UI after first render
+    const listed = this.entries.find((e) => e.path === entry.path);
+    if (listed) listed.size = buf.byteLength;
+
     onProgress?.({ phase: 'extracting', fraction: 1 });
     return buf;
   }
@@ -93,7 +100,12 @@ export const pdfHandler: ArchiveHandler = {
     const data = new Uint8Array(await file.arrayBuffer());
     onProgress?.({ phase: 'indexing', message: 'Reading pages...', fraction: 0.3 });
 
-    const pdf = await pdfjs.getDocument({ data, useSystemFonts: true }).promise;
+    const loadingTask = pdfjs.getDocument({
+      data,
+      useSystemFonts: true,
+      isEvalSupported: false,
+    });
+    const pdf = await loadingTask.promise;
     const total = pdf.numPages;
     const entries: ArchiveEntry[] = [];
     for (let i = 0; i < total; i++) {
@@ -101,11 +113,14 @@ export const pdfHandler: ArchiveHandler = {
         path: pagePath(i, total),
         name: pagePath(i, total),
         isDirectory: false,
-        // Unknown until rendered; placeholder keeps UI happy
         size: 0,
       });
     }
-    onProgress?.({ phase: 'indexing', fraction: 1, message: `${total} page${total === 1 ? '' : 's'}` });
+    onProgress?.({
+      phase: 'indexing',
+      fraction: 1,
+      message: `${total} page${total === 1 ? '' : 's'}`,
+    });
     return new PdfReader(pdf, entries);
   },
 };
