@@ -141,7 +141,7 @@ export async function build7z(
   files: PackFile[],
   onProgress?: (p: PackProgress) => void,
 ): Promise<Uint8Array> {
-  onProgress?.({ phase: 'packing', message: 'Booting 7-Zipâ¦' });
+  onProgress?.({ phase: 'packing', message: 'Booting 7-Zip¦' });
   const zip = await SevenZipFactory({
     locateFile: () => wasmUrl,
     print: () => {},
