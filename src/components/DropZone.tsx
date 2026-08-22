@@ -32,7 +32,7 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
             aria-hidden="true"
           >
             <img
-              src="/IMG_1020.jpeg"
+              src="/Background Eraser.png"
               alt=""
               className="h-9 w-9 object-contain sm:h-10 sm:w-10"
             />
