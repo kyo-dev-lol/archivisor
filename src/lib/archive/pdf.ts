@@ -1,9 +1,10 @@
 import * as pdfjs from 'pdfjs-dist';
-import workerSrc from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import type { ArchiveEntry, ArchiveHandler, ArchiveReader, ProgressCallback } from './types';
 
-// Keep worker in sync with the same pdfjs-dist build (fixes getOrInsertComputed / worker mismatch).
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+// Use CDN worker matching pdfjs-dist 4.10.38.
+// Local ?url worker often 404s on SPA hosts (Cloudflare returns index.html → MIME error).
+const PDFJS_VERSION = '4.10.38';
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.worker.min.mjs`;
 
 function isPdfHeader(bytes: Uint8Array): boolean {
   return (
@@ -62,7 +63,6 @@ class PdfReader implements ArchiveReader {
     const task = page.render({
       canvasContext: ctx,
       viewport,
-      // pdfjs 4.x types
       canvas,
     } as Parameters<typeof page.render>[0]);
     await task.promise;
@@ -74,7 +74,6 @@ class PdfReader implements ArchiveReader {
     const buf = new Uint8Array(await blob.arrayBuffer());
     this.pageCache.set(pageNumber, buf);
 
-    // Update listed size for UI after first render
     const listed = this.entries.find((e) => e.path === entry.path);
     if (listed) listed.size = buf.byteLength;
 
@@ -100,12 +99,12 @@ export const pdfHandler: ArchiveHandler = {
     const data = new Uint8Array(await file.arrayBuffer());
     onProgress?.({ phase: 'indexing', message: 'Reading pages...', fraction: 0.3 });
 
-    const loadingTask = pdfjs.getDocument({
+    const pdf = await pdfjs.getDocument({
       data,
       useSystemFonts: true,
       isEvalSupported: false,
-    });
-    const pdf = await loadingTask.promise;
+    }).promise;
+
     const total = pdf.numPages;
     const entries: ArchiveEntry[] = [];
     for (let i = 0; i < total; i++) {
