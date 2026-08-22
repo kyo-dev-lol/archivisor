@@ -31,7 +31,7 @@ export default function App() {
       if (!handler) {
         setState({
           phase: 'idle',
-          error: `"${file.name}" doesn't look like a supported archive (ZIP, 7Z, TAR, TAR.GZ, GZ, BZ2, XZ).`,
+          error: `"${file.name}" doesn't look like a supported file (ZIP, 7Z, TAR, TAR.GZ, GZ, BZ2, XZ, PDF).`,
         });
         return;
       }
