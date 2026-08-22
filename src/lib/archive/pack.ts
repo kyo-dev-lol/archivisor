@@ -169,7 +169,7 @@ export async function build7z(
   }
 
   const outPath = `${work}/out.7z`;
-  onProgress?.({ phase: 'compressing', message: 'Compressing 7Zâ¦', fraction: 0.4 });
+  onProgress?.({ phase: 'compressing', message: 'Compressing 7Z¦', fraction: 0.4 });
   // Archive everything under inDir (relative paths preserved by cwd-style paths we wrote)
   zip.callMain(['a', '-t7z', '-y', outPath, inDir + '/.']);
   onProgress?.({ phase: 'compressing', fraction: 1 });
