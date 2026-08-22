@@ -129,7 +129,7 @@ export async function buildTarGz(
   files: PackFile[],
   onProgress?: (p: PackProgress) => void,
 ): Promise<Uint8Array> {
-  onProgress?.({ phase: 'packing', message: 'Building TARâ¦' });
+  onProgress?.({ phase: 'packing', message: 'Building TAR¦' });
   const tar = await buildTar(files);
   onProgress?.({ phase: 'compressing', message: 'Gzipâ¦', fraction: 0.5 });
   const gz = gzipSync(tar, { level: 6 });
@@ -187,7 +187,7 @@ export async function packArchive(
     case 'zip':
       return buildZip(files, onProgress);
     case 'tar':
-      onProgress?.({ phase: 'packing', message: 'Building TARâ¦' });
+      onProgress?.({ phase: 'packing', message: 'Building TAR¦' });
       return buildTar(files);
     case 'tar.gz':
       return buildTarGz(files, onProgress);
