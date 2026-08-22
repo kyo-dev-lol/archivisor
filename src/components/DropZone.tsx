@@ -28,10 +28,14 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
       <div className="w-full max-w-2xl animate-rise">
         <div className="mb-8 text-center sm:mb-10">
           <div
-            className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-[var(--vault-line)] bg-[var(--vault-panel)] sm:h-16 sm:w-16"
+            className="mx-auto mb-5 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[var(--vault-line)] bg-[var(--vault-panel)] sm:h-16 sm:w-16"
             aria-hidden="true"
           >
-            <VaultIcon />
+            <img
+              src="/Img_1016.jpeg"
+              alt=""
+              className="h-9 w-9 object-contain sm:h-10 sm:w-10"
+            />
           </div>
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-[var(--vault-ink)] sm:text-4xl">
             Archivisor
