@@ -16,7 +16,8 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "seek-bzip": "^2.0.0",
-    "xz-decompress": "^0.2.3"
+    "xz-decompress": "^0.2.3",
+    "pdfjs-dist": "^5.4.149"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
