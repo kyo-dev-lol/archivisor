@@ -7,7 +7,7 @@ interface DropZoneProps {
   onCreateArchive?: () => void;
 }
 
-const FORMAT_BADGES = ['ZIP', '7Z', 'TAR', 'TAR.GZ', 'GZ', 'BZ2', 'XZ'];
+const FORMAT_BADGES = ['ZIP', '7Z', 'TAR', 'TAR.GZ', 'GZ', 'BZ2', 'XZ', 'PDF'];
 
 export default function DropZone({ onFileSelected, errorMessage, onCreateArchive }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -41,7 +41,7 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
             Archivisor
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[var(--vault-ink-dim)] sm:text-base">
-                        Open archives in the browser, extract only what you need - or pack files into ZIP, TAR, 7Z.
+                        Open archives and PDFs in the browser, extract only what you need - or pack files into ZIP, TAR, 7Z.
           </p>
         </div>
 
