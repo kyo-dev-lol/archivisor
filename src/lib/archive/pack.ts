@@ -131,7 +131,7 @@ export async function buildTarGz(
 ): Promise<Uint8Array> {
   onProgress?.({ phase: 'packing', message: 'Building TAR¦' });
   const tar = await buildTar(files);
-  onProgress?.({ phase: 'compressing', message: 'Gzipâ¦', fraction: 0.5 });
+  onProgress?.({ phase: 'compressing', message: 'Gzip¦', fraction: 0.5 });
   const gz = gzipSync(tar, { level: 6 });
   onProgress?.({ phase: 'compressing', fraction: 1 });
   return gz;
