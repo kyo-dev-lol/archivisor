@@ -6,11 +6,13 @@ import { gzHandler } from './gz';
 import { bz2Handler } from './bz2';
 import { xzHandler } from './xz';
 import { sevenZipHandler } from './sevenzip';
+import { pdfHandler } from './pdf';
 
 // Registered in a deliberate order: formats with distinctive magic bytes and
 // compound extensions (tar.gz) are checked before their looser single-file
 // cousins (gz), so e.g. "archive.tar.gz" is claimed by targzHandler, not gz.
 export const archiveHandlers: ArchiveHandler[] = [
+  pdfHandler,
   zipHandler,
   sevenZipHandler,
   targzHandler,
