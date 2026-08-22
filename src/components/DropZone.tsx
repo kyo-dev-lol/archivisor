@@ -32,7 +32,7 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
             aria-hidden="true"
           >
             <img
-              src="/Img_1016.jpeg"
+              src="/IMG_1016.jpeg"
               alt=""
               className="h-9 w-9 object-contain sm:h-10 sm:w-10"
             />
