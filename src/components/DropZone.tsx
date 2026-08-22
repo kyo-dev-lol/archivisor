@@ -140,15 +140,6 @@ export default function DropZone({ onFileSelected, errorMessage, onCreateArchive
   );
 }
 
-function VaultIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--vault-copper-bright)" strokeWidth="1.6">
-      <circle cx="12" cy="12" r="9" />
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
-    </svg>
-  );
-}
 
 function LockIcon() {
   return (
